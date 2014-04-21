@@ -5,11 +5,12 @@ A simple integration between Guice's [persistence extensions](https://code.googl
 ## Maven Coordinates
 
 This isn't yet released in any public repository, but if it were, you would find it here:
-    <dependency>
-	    <groupId>com.adamlewis</groupId>
-		<artifactId>guice-persist-jooq</artifactId>
-		<version>0.1.1-SNAPSHOT</version>
-    </dependency>
+
+	<dependency>
+	   <groupId>com.adamlewis</groupId>
+	   <artifactId>guice-persist-jooq</artifactId>
+	   <version>0.1.1-SNAPSHOT</version>
+	</dependency>
 
 ## Basic Usage
 See [Guice Persist](https://code.google.com/p/google-guice/wiki/GuicePersist) and [Transactions and Units of Work](https://code.google.com/p/google-guice/wiki/Transactions) for a reference on the basic semantics of the Guice Persist extension.
