@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.adamlewis</groupId>
+  <artifactId>guice-persist-jooq</artifactId>
+  <version>0.1.1-SNAPSHOT</version>
+  <name>Guice Persist jOOQ extension</name>
+  <description>Guice-persist extension for using jOOQ based persistence layer</description>
+  
+  
+  <dependencies>
+  	<dependency>
+	  <groupId>com.google.inject.extensions</groupId>
+	  <artifactId>guice-persist</artifactId>
+	  <version>3.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.google.guava</groupId>
+		<artifactId>guava</artifactId>
+		<version>13.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jooq</groupId>
+		<artifactId>jooq</artifactId>
+		<version>3.1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.7.5</version>
+	</dependency>
+  </dependencies>
+  <build>
+  	<plugins>
+  		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-release-plugin</artifactId>
+			<version>2.5</version>			
+		</plugin>
+  	</plugins>
+  </build>
+</project>
