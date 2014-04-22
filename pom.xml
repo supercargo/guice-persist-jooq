@@ -6,19 +6,16 @@
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-	  
+
 	<groupId>com.adamlewis</groupId>
 	<artifactId>guice-persist-jooq</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
 	<name>Guice Persist jOOQ extension</name>
 	<description>Guice-persist extension for using jOOQ based persistence layer</description>
+	<url>https://github.com/supercargo/guice-persist-jooq</url>
 
-	<developers>
-		<developer>
-			<name>Adam Lewis</name>
-			<email>github@adamlewis.com</email>
-		</developer>
-	</developers>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -26,7 +23,22 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-  
+
+	<scm>
+		<url>https://github.com/supercargo/guice-persist-jooq</url>
+		<connection>scm:git:git@github.com:supercargo/guice-persist-jooq.git</connection>
+		<developerConnection>scm:git:git@github.com:supercargo/guice-persist-jooq.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Adam Lewis</name>
+			<email>github@adamlewis.com</email>
+		</developer>
+	</developers>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
@@ -64,7 +76,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>release</id>
