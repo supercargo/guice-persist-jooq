@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -9,7 +8,7 @@
 
 	<groupId>com.adamlewis</groupId>
 	<artifactId>guice-persist-jooq</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>Guice Persist jOOQ extension</name>
@@ -28,7 +27,7 @@
 		<url>https://github.com/supercargo/guice-persist-jooq</url>
 		<connection>scm:git:git@github.com:supercargo/guice-persist-jooq.git</connection>
 		<developerConnection>scm:git:git@github.com:supercargo/guice-persist-jooq.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>guice-persist-jooq-0.1.1</tag>
 	</scm>
 
 	<developers>
