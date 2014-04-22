@@ -4,12 +4,12 @@ A simple integration between Guice's [persistence extensions](https://code.googl
 
 ## Maven Coordinates
 
-This isn't yet released in any public repository, but if it were, you would find it here:
+The project is deployed to Maven Central:
 
 	<dependency>
 	   <groupId>com.adamlewis</groupId>
 	   <artifactId>guice-persist-jooq</artifactId>
-	   <version>0.1.1-SNAPSHOT</version>
+	   <version>0.1.1</version>
 	</dependency>
 
 ## Basic Usage
