@@ -13,7 +13,7 @@ The project is deployed to Maven Central:
 	</dependency>
 
 ## Basic Usage
-See [Guice Persist](https://code.google.com/p/google-guice/wiki/GuicePersist) and [Transactions and Units of Work](https://code.google.com/p/google-guice/wiki/Transactions) for a reference on the basic semantics of the Guice Persist extension.
+See [Guice Persist](https://github.com/google/guice/wiki/GuicePersist) and [Transactions and Units of Work](https://github.com/google/guice/wiki/Transactions) for a reference on the basic semantics of the Guice Persist extension.
 
 In your module, install a new `com.adamlewis.guice.persist.jooq.JooqPersistModule` and then provide bindings for `javax.sql.DataSource` and `org.jooq.SQLDialect`. Then write `@Inject`able DAOs which depend on `org.jooq.DSLContext`.
 
