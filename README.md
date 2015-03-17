@@ -15,7 +15,7 @@ The project is deployed to Maven Central:
 ## Basic Usage
 See [Guice Persist](https://github.com/google/guice/wiki/GuicePersist) and [Transactions and Units of Work](https://github.com/google/guice/wiki/Transactions) for a reference on the basic semantics of the Guice Persist extension.
 
-In your module, install a new `com.adamlewis.guice.persist.jooq.JooqPersistModule` and then provide bindings for `javax.sql.DataSource` and `org.jooq.SQLDialect`. Then write `@Inject`able DAOs which depend on `org.jooq.DSLContext`.
+In your module, install a new `com.adamlewis.guice.persist.jooq.JooqPersistModule` and then provide bindings for `javax.sql.DataSource` and `org.jooq.SQLDialect`. Then write `@Inject`able DAOs which depend on a `com.google.inject.Provider` for `org.jooq.DSLContext`. **This is very important**: don't inject `DSLContext` directly, always use a provider - the `DSLContext` is bound to the current thread and using a provider ensures that the DAO will access the current's thread `DSLContext`. This also allows the `@Transactional` annotation to properly intercept the method call and modify the current thread's `DSLContext`.
 
 ## Example
 
@@ -61,16 +61,17 @@ Here is an example Guice module written to connect guice-persist-jooq up to the 
 And here is an example of what a DAO might look like:
 
 	public class UserDao {
-
-		private final DSLContext create;
+		// Note the usage of Provider,
+		// instead of directly injecting DSLContext
+		private final Provider<DSLContext> create;
 		
 		@Inject
-		public UserDao(final DSLContext dsl) {
+		public UserDao(final Provider<DSLContext> dsl) {
 			this.create = dsl;
 		}
 		
 		
 		public List<String> getUsernames() {
-			return create.selectDistinct(User.USER.NAME).from(User.USER).fetch(User.USER.NAME);
+			return create.get().selectDistinct(User.USER.NAME).from(User.USER).fetch(User.USER.NAME);
 		}	
 	}
