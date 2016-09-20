@@ -20,6 +20,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
@@ -52,6 +53,9 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   
   @Inject
   private final Settings jooqSettings = null;
+
+  @Inject
+  private final Configuration configuration = null;
   
   @Inject
   public JooqPersistService(final DataSource jdbcSource, final SQLDialect sqlDialect) {
@@ -95,10 +99,18 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
     }
     
     DSLContext jooqFactory;
-    if (jooqSettings == null) {
-      jooqFactory = DSL.using(conn, sqlDialect);
+
+    if (configuration != null) {
+      logger.debug("Creating factory from configuration");
+      jooqFactory = DSL.using(configuration);
     } else {
-      jooqFactory = DSL.using(conn, sqlDialect, jooqSettings);
+      if (jooqSettings == null) {
+        logger.debug("Creating factory with dialect");
+        jooqFactory = DSL.using(conn, sqlDialect);
+      } else {
+        logger.debug("Creating factory with dialect and settings.");
+        jooqFactory = DSL.using(conn, sqlDialect, jooqSettings);
+      }
     }
     threadConnection.set(conn);
     threadFactory.set(jooqFactory);
