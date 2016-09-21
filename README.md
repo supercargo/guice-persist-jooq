@@ -15,7 +15,7 @@ The project is deployed to Maven Central:
 ## Basic Usage
 See [Guice Persist](https://github.com/google/guice/wiki/GuicePersist) and [Transactions and Units of Work](https://github.com/google/guice/wiki/Transactions) for a reference on the basic semantics of the Guice Persist extension.
 
-In your module, install a new `com.adamlewis.guice.persist.jooq.JooqPersistModule` and then provide bindings for `javax.sql.DataSource` and `org.jooq.SQLDialect`. Then write `@Inject`able DAOs which depend on `org.jooq.DSLContext`.
+In your module, install a new `com.adamlewis.guice.persist.jooq.JooqPersistModule` and then provide bindings for `javax.sql.DataSource` and `org.jooq.SQLDialect`. Optionally, a binding for `org.jooq.Configuration` can be provided, to customize the creation of the `org.jooq.DSLContext` instance. Then write `@Inject`able DAOs which depend on `org.jooq.DSLContext`.
 
 ## Example
 
@@ -55,8 +55,17 @@ Here is an example Guice module written to connect guice-persist-jooq up to the 
 		public SQLDialect dialect() {
 			//TODO read from DB configuration
 			return SQLDialect.POSTGRES;
+		}		
+		
+		// Optional, for full customization of the creation.
+		@Provides
+		public Configuration configuration(DataSource dataSource, SQLDialect dialect) {
+		        return new DefaultConfiguration()
+                        .set(dataSource)
+                        .set(new MaybeCustomMapperProvider())
+                        .set(dialect);
 		}
-	}
+ 	}
 
 And here is an example of what a DAO might look like:
 
