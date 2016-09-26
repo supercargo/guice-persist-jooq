@@ -52,14 +52,13 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   private final SQLDialect sqlDialect;
   
   @Inject
-  private final Settings jooqSettings = null;
+  private Settings jooqSettings = null;
 
   @Inject
-  private final Configuration configuration = null;
+  private Configuration configuration = null;
   
   @Inject
   public JooqPersistService(final DataSource jdbcSource, final SQLDialect sqlDialect) {
-    //TODO allow injection of jOOQ settings
     this.jdbcSource = jdbcSource;
     this.sqlDialect = sqlDialect;
   }
@@ -101,14 +100,17 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
     DSLContext jooqFactory;
 
     if (configuration != null) {
-      logger.debug("Creating factory from configuration");
+      logger.debug("Creating factory from configuration having dialect {}", configuration.dialect());
+      if (jooqSettings != null) {
+        logger.warn("@Injected org.jooq.conf.Settings is being ignored since a full org.jooq.Configuration was supplied");
+      }
       jooqFactory = DSL.using(configuration);
     } else {
       if (jooqSettings == null) {
-        logger.debug("Creating factory with dialect");
+        logger.debug("Creating factory with dialect {}", sqlDialect);
         jooqFactory = DSL.using(conn, sqlDialect);
       } else {
-        logger.debug("Creating factory with dialect and settings.");
+        logger.debug("Creating factory with dialect {} and settings.", sqlDialect);
         jooqFactory = DSL.using(conn, sqlDialect, jooqSettings);
       }
     }
