@@ -51,10 +51,10 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   private final DataSource jdbcSource;
   private final SQLDialect sqlDialect;
   
-  @Inject
+  @Inject(optional = true)
   private Settings jooqSettings = null;
 
-  @Inject
+  @Inject(optional = true)
   private Configuration configuration = null;
   
   @Inject
