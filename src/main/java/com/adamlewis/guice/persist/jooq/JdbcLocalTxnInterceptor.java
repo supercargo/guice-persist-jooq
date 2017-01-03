@@ -17,6 +17,8 @@
 package com.adamlewis.guice.persist.jooq;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -34,7 +36,9 @@ import com.google.inject.persist.UnitOfWork;
 class JdbcLocalTxnInterceptor implements MethodInterceptor {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcLocalTxnInterceptor.class);
-  
+
+  private static final ConcurrentMap<Method, Transactional> methodsTransactionals = new ConcurrentHashMap<Method, Transactional>();
+
   @Inject
   private final JooqPersistService jooqProvider = null;
 
@@ -107,18 +111,23 @@ class JdbcLocalTxnInterceptor implements MethodInterceptor {
     return result;
   }
 
-  // TODO(dhanji): Cache this method's results.
   private Transactional readTransactionMetadata(final MethodInvocation methodInvocation) {
-    Transactional transactional;
     Method method = methodInvocation.getMethod();
-    Class<?> targetClass = methodInvocation.getThis().getClass();
+    Transactional cachedTransactional = methodsTransactionals.get(method);
+    if (cachedTransactional != null) {
+      return cachedTransactional;
+    }
 
-    transactional = method.getAnnotation(Transactional.class);
+    Transactional transactional = method.getAnnotation(Transactional.class);
     if (null == transactional) {
       // If none on method, try the class.
+      Class<?> targetClass = methodInvocation.getThis().getClass();
       transactional = targetClass.getAnnotation(Transactional.class);
     }
-    if (null == transactional) {
+
+    if (null != transactional) {
+      methodsTransactionals.put(method, transactional);
+    } else {
       // If there is no transactional annotation present, use the default
       transactional = Internal.class.getAnnotation(Transactional.class);
     }
@@ -129,7 +138,7 @@ class JdbcLocalTxnInterceptor implements MethodInterceptor {
   /**
    * Returns True if rollback DID NOT HAPPEN (i.e. if commit should continue).
    *
-   * @param transactional The metadata annotaiton of the method
+   * @param transactional The metadata annotation of the method
    * @param e The exception to test for rollback
    * @param txn A JPA Transaction to issue rollbacks on
    */
