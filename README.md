@@ -1,6 +1,6 @@
 # Guice Persist / jOOQ Integration
 
-A simple integration between Guice's [persistence extensions](https://code.google.com/p/google-guice/wiki/GuicePersist) and [jOOQ](http://jooq.org/).  Follows closely in the pattern of of the JPA persistence extension written by Dhanji R. Prasanna (dhanji@gmail.com).
+A simple integration between Guice's [persistence extensions](https://code.google.com/p/google-guice/wiki/GuicePersist) and [jOOQ](http://jooq.org/).  Follows closely in the pattern of the JPA persistence extension written by Dhanji R. Prasanna (dhanji@gmail.com).
 
 ## Maven Coordinates
 
