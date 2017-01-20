@@ -8,7 +8,7 @@
 
 	<groupId>com.adamlewis</groupId>
 	<artifactId>guice-persist-jooq</artifactId>
-	<version>0.1.6-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>Guice Persist jOOQ extension</name>
@@ -27,7 +27,7 @@
 		<url>https://github.com/supercargo/guice-persist-jooq</url>
 		<connection>scm:git:git@github.com:supercargo/guice-persist-jooq.git</connection>
 		<developerConnection>scm:git:git@github.com:supercargo/guice-persist-jooq.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>guice-persist-jooq-0.2.0</tag>
 	</scm>
 
 	<developers>
