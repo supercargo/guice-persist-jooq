@@ -16,10 +16,15 @@
 
 package com.adamlewis.guice.persist.jooq;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.persist.PersistService;
+import com.google.inject.persist.UnitOfWork;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -29,34 +34,28 @@ import org.jooq.impl.DefaultConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.google.inject.persist.PersistService;
-import com.google.inject.persist.UnitOfWork;
 
 /**
  * Based on the JPA Persistence Service by Dhanji R. Prasanna (dhanji@gmail.com)
- * 
+ *
  * @author Adam Lewis (github@adamlewis.com)
  */
 @Singleton
 class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistService {
-  
+
   private static final Logger logger = LoggerFactory.getLogger(JooqPersistService.class);
-  
+
   private final ThreadLocal<DSLContext> threadFactory = new ThreadLocal<DSLContext>();
   private final ThreadLocal<DefaultConnectionProvider> threadConnection = new ThreadLocal<DefaultConnectionProvider>();
   private final DataSource jdbcSource;
   private final SQLDialect sqlDialect;
-  
+
   @Inject(optional = true)
   private Settings jooqSettings = null;
 
   @Inject(optional = true)
   private Configuration configuration = null;
-  
+
   @Inject
   public JooqPersistService(final DataSource jdbcSource, final SQLDialect sqlDialect) {
     this.jdbcSource = jdbcSource;
@@ -64,18 +63,14 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   }
 
   public DSLContext get() {
-    if (!isWorking()) {
-      begin();
-    }
-
     DSLContext factory = threadFactory.get();
     Preconditions.checkState(null != factory, "Requested Factory outside work unit. "
-        + "Try calling UnitOfWork.begin() first, or use a PersistFilter if you "
-        + "are inside a servlet environment.");
+                                              + "Try calling UnitOfWork.begin() first, use @Transactional annotation"
+                                              + "or use a PersistFilter if you are inside a servlet environment.");
 
     return factory;
   }
-  
+
   public DefaultConnectionProvider getConnectionWrapper() {
 	  return threadConnection.get();
   }
@@ -96,7 +91,7 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-    
+
     DSLContext jooqFactory;
 
     if (configuration != null) {
