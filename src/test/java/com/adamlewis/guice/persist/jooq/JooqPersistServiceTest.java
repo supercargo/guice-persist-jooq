@@ -1,11 +1,10 @@
 package com.adamlewis.guice.persist.jooq;
 
-import java.util.Set;
+import java.util.*;
 
 import com.adamlewis.guice.persist.jooq.modules.ConfigurationModule;
 import com.adamlewis.guice.persist.jooq.modules.DataSourceModule;
 import com.adamlewis.guice.persist.jooq.modules.SettingsModule;
-import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -67,7 +66,7 @@ public class JooqPersistServiceTest {
   }
 
   private JooqPersistService givenJooqPersistServiceWithModule(Module... modules) {
-    Set<Module> moduleList = Sets.newHashSet(modules);
+    Set<Module> moduleList = new HashSet<Module>(Arrays.asList(modules));
     moduleList.add(new JooqPersistModule());
     moduleList.add(new DataSourceModule());
     injector = Guice.createInjector(moduleList);
