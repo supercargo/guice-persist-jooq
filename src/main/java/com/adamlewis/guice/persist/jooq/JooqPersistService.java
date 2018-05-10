@@ -19,7 +19,6 @@ package com.adamlewis.guice.persist.jooq;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -64,9 +63,11 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
 
   public DSLContext get() {
     DSLContext factory = threadFactory.get();
-    Preconditions.checkState(null != factory, "Requested Factory outside work unit. "
-                                              + "Try calling UnitOfWork.begin() first, use @Transactional annotation"
-                                              + "or use a PersistFilter if you are inside a servlet environment.");
+    if(null == factory) {
+      throw new IllegalStateException("Requested Factory outside work unit. "
+              + "Try calling UnitOfWork.begin() first, use @Transactional annotation"
+              + "or use a PersistFilter if you are inside a servlet environment.");
+    }
 
     return factory;
   }
@@ -80,9 +81,11 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   }
 
   public void begin() {
-    Preconditions.checkState(null == threadFactory.get(),
-        "Work already begun on this thread. Looks like you have called UnitOfWork.begin() twice"
-         + " without a balancing call to end() in between.");
+    if(null != threadFactory.get()) {
+      throw new IllegalStateException("Work already begun on this thread. "
+              + "It looks like you have called UnitOfWork.begin() twice"
+              + " without a balancing call to end() in between.");
+    }
 
     DefaultConnectionProvider conn;
     try {
