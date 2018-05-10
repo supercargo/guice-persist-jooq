@@ -1,5 +1,12 @@
 # Release Notes
 
+## Version 1.0.0
+- (breaking) Injector provided `DSLContext` no longer starts `UnitOfWork` automatically.  Clients must explicitly 
+control transaction boundaries or use `@Transactional` annotations; fixes #9
+- (dependency) Removed dependency on Guava
+- (dependency) jOOQ is now `provided` scope
+- (dependency) `slf4j-api` upgraded from `1.7.5` to `1.7.25`
+
 ## Version 0.2.0
 - Added several tests for transaction interceptor
 - Fix issue where auto-commit wouldn't be re-enabled in certain execption cases
