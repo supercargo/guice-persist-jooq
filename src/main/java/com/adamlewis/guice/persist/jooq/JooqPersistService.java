@@ -46,7 +46,7 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
 
   private final ThreadLocal<DSLContext> threadFactory = new ThreadLocal<DSLContext>();
   private final ThreadLocal<DefaultConnectionProvider> threadConnection = new ThreadLocal<DefaultConnectionProvider>();
-  private final DataSource jdbcSource;
+  private final Provider<DataSource> jdbcSource;
   private final SQLDialect sqlDialect;
 
   @Inject(optional = true)
@@ -56,7 +56,7 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   private Configuration configuration = null;
 
   @Inject
-  public JooqPersistService(final DataSource jdbcSource, final SQLDialect sqlDialect) {
+  public JooqPersistService(final Provider<DataSource> jdbcSource, final SQLDialect sqlDialect) {
     this.jdbcSource = jdbcSource;
     this.sqlDialect = sqlDialect;
   }
@@ -90,7 +90,11 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
     DefaultConnectionProvider conn;
     try {
       logger.debug("Getting JDBC connection");
-      conn = new DefaultConnectionProvider(jdbcSource.getConnection());
+      DataSource dataSource = jdbcSource.get();
+      if (dataSource == null) {
+        throw new RuntimeException("Datasource not available from provider");
+      }
+      conn = new DefaultConnectionProvider(jdbcSource.get().getConnection());
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
