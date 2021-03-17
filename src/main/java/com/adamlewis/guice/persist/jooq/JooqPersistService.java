@@ -94,7 +94,7 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
       if (dataSource == null) {
         throw new RuntimeException("Datasource not available from provider");
       }
-      conn = new DefaultConnectionProvider(jdbcSource.get().getConnection());
+      conn = new DefaultConnectionProvider(dataSource.getConnection());
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
