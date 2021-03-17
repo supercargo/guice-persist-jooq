@@ -17,6 +17,8 @@
 package com.adamlewis.guice.persist.jooq;
 
 import javax.sql.DataSource;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.google.inject.Inject;
@@ -91,10 +93,8 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
     try {
       logger.debug("Getting JDBC connection");
       DataSource dataSource = jdbcSource.get();
-      if (dataSource == null) {
-        throw new RuntimeException("Datasource not available from provider");
-      }
-      conn = new DefaultConnectionProvider(dataSource.getConnection());
+      Connection jdbcConn = dataSource.getConnection();
+      conn = new DefaultConnectionProvider(jdbcConn);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
