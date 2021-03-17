@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 1.1.0
+- (enhancement) `DataSource` is now injected to the (normally singleton) service using a Guice `Provider` to allow the 
+  transaction context's scope control over data source creation.  Thanks @mrohan01
+
+
 ## Version 1.0.0
 - (breaking) Injector provided `DSLContext` no longer starts `UnitOfWork` automatically.  Clients must explicitly 
 control transaction boundaries or use `@Transactional` annotations; fixes #9
