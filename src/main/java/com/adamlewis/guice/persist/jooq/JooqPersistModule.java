@@ -16,12 +16,16 @@
 
 package com.adamlewis.guice.persist.jooq;
 
+import static com.google.inject.multibindings.OptionalBinder.newOptionalBinder;
+
 import com.google.inject.Singleton;
 import com.google.inject.persist.PersistModule;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.UnitOfWork;
 import org.aopalliance.intercept.MethodInterceptor;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.conf.Settings;
 
 /**
  * Jooq Factory provider for guice persist.
@@ -33,6 +37,8 @@ public final class JooqPersistModule extends PersistModule {
 
   @Override
   protected void configurePersistence() {
+    newOptionalBinder(binder(), Settings.class);
+    newOptionalBinder(binder(), Configuration.class);
     bind(JooqPersistService.class).in(Singleton.class);
     bind(PersistService.class).to(JooqPersistService.class);
     bind(UnitOfWork.class).to(JooqPersistService.class);

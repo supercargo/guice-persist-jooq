@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 
 public class DataSourceModule extends AbstractModule {
   public static final SQLDialect DEFAULT_DIALECT = SQLDialect.SQLITE;
+  private static final DataSource DATA_SOURCE = mock(DataSource.class);
 
   protected void configure() {
     binder().requireExplicitBindings();
@@ -18,6 +19,6 @@ public class DataSourceModule extends AbstractModule {
 
   @Provides
   public DataSource mockDataSource(){
-    return mock(DataSource.class);
+    return DATA_SOURCE;
   }
 }

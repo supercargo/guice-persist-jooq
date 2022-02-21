@@ -1,5 +1,6 @@
 package com.adamlewis.guice.persist.jooq;
 
+import java.sql.Connection;
 import java.util.*;
 
 import com.adamlewis.guice.persist.jooq.modules.ConfigurationModule;
@@ -8,12 +9,15 @@ import com.adamlewis.guice.persist.jooq.modules.SettingsModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import javax.sql.DataSource;
 import org.jooq.Configuration;
 import org.jooq.conf.BackslashEscaping;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class JooqPersistServiceTest {
 
@@ -33,11 +37,22 @@ public class JooqPersistServiceTest {
   }
 
   @Test
-  public void canProvideAConfiguration() {
+  public void canProvideAConfiguration() throws Exception {
     JooqPersistService jooqPersistService = givenJooqPersistServiceWithModule(new ConfigurationModule());
+    DataSource dataSource = injector.getInstance(DataSource.class);
+    Connection connectionMock = mock(Connection.class);
+    when(dataSource.getConnection()).thenReturn(connectionMock);
+
     jooqPersistService.begin();
 
-    assertEquals(injector.getInstance(Configuration.class), jooqPersistService.get().configuration());
+    Configuration configuration = injector.getInstance(Configuration.class);
+    Configuration transactionConfiguration = jooqPersistService.get().configuration();
+    assertNotNull(transactionConfiguration);
+    // the connection must be provided for each transaction configuration hence it will differ from default configuration
+    assertNotEquals(configuration, transactionConfiguration);
+    assertEquals(configuration.dialect(), transactionConfiguration.dialect());
+    assertEquals(configuration.settings(), transactionConfiguration.settings());
+    assertEquals(connectionMock, transactionConfiguration.connectionProvider().acquire());
   }
 
   @Test
@@ -54,8 +69,13 @@ public class JooqPersistServiceTest {
     JooqPersistService jooqPersistService = givenJooqPersistServiceWithModule(new ConfigurationModule(), new SettingsModule());
     jooqPersistService.begin();
 
-    assertEquals(injector.getInstance(Configuration.class), jooqPersistService.get().configuration());
-    assertEquals(BackslashEscaping.DEFAULT, jooqPersistService.get().settings().getBackslashEscaping());
+    Configuration configuration = injector.getInstance(Configuration.class);
+    Configuration transactionConfiguration = jooqPersistService.get().configuration();
+    assertNotNull(transactionConfiguration);
+    assertNotEquals(configuration, transactionConfiguration);
+    assertEquals(configuration.dialect(), transactionConfiguration.dialect());
+    assertEquals(configuration.settings(), transactionConfiguration.settings());
+    assertEquals(BackslashEscaping.DEFAULT, transactionConfiguration.settings().getBackslashEscaping());
   }
 
   @Test(expected = IllegalStateException.class)
@@ -66,7 +86,7 @@ public class JooqPersistServiceTest {
   }
 
   private JooqPersistService givenJooqPersistServiceWithModule(Module... modules) {
-    Set<Module> moduleList = new HashSet<Module>(Arrays.asList(modules));
+    Set<Module> moduleList = new HashSet<>(Arrays.asList(modules));
     moduleList.add(new JooqPersistModule());
     moduleList.add(new DataSourceModule());
     injector = Guice.createInjector(moduleList);
