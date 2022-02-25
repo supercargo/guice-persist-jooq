@@ -8,7 +8,7 @@
 
 	<groupId>com.adamlewis</groupId>
 	<artifactId>guice-persist-jooq</artifactId>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>2.0.0-beta-2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Guice Persist jOOQ extension</name>
@@ -37,7 +37,6 @@
 		</developer>
 	</developers>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
@@ -47,7 +46,7 @@
 		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>
-			<version>3.16.4</version>
+			<version>3.14.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -108,7 +107,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>3.2.1</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -121,7 +120,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.9.1</version>
+						<version>3.3.0</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -134,6 +133,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.0.1</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
