@@ -9,7 +9,7 @@ The project is deployed to Maven Central:
 	<dependency>
 	   <groupId>com.adamlewis</groupId>
 	   <artifactId>guice-persist-jooq</artifactId>
-	   <version>1.1.0</version>
+	   <version>2.0.0</version>
 	</dependency>
 
 ## Basic Usage

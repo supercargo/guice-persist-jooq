@@ -1,5 +1,15 @@
 # Release Notes
 
+## Version 2.0.0
+Thanks to @apptio-msobala for contributing the major changes and testing of this release
+- (fix) Reuse acquired connection in transaction configuration
+- (enhancement) Use Guice _Optional_ binder for `Configuration` and `Settings`
+- (enhancement) Reduce repeated warnings about ignored Settings (logged on Service construction only)
+- (breaking) Drop Java 7 support.  Requires Java 8 or above.
+- (dependency) Bumped jOOQ minor version to 3.14 (last OSS version supporting Java 8)
+- (dependency) Bumped Guice to 5.1.0
+
+
 ## Version 1.1.0
 - (enhancement) `DataSource` is now injected to the (normally singleton) service using a Guice `Provider` to allow the 
   transaction context's scope control over data source creation.  Thanks @mrohan01

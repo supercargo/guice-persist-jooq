@@ -37,7 +37,6 @@
 		</developer>
 	</developers>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
