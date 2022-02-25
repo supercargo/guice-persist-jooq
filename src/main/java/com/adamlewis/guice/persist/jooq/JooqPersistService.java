@@ -16,6 +16,7 @@
 
 package com.adamlewis.guice.persist.jooq;
 
+import java.util.Optional;
 import javax.sql.DataSource;
 
 import java.sql.Connection;
@@ -50,17 +51,21 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
   private final ThreadLocal<DefaultConnectionProvider> threadConnection = new ThreadLocal<DefaultConnectionProvider>();
   private final Provider<DataSource> jdbcSource;
   private final SQLDialect sqlDialect;
-
-  @Inject(optional = true)
-  private Settings jooqSettings = null;
-
-  @Inject(optional = true)
-  private Configuration configuration = null;
+  private final Settings jooqSettings;
+  private final Configuration configuration;
 
   @Inject
-  public JooqPersistService(final Provider<DataSource> jdbcSource, final SQLDialect sqlDialect) {
+  public JooqPersistService(final Provider<DataSource> jdbcSource, final SQLDialect sqlDialect,
+      Optional<Settings> jooqSettings, Optional<Configuration> configuration) {
     this.jdbcSource = jdbcSource;
     this.sqlDialect = sqlDialect;
+    this.configuration = configuration.orElse(null);
+    if (configuration.isPresent() && jooqSettings.isPresent()) {
+      logger.warn("@Injected org.jooq.conf.Settings is being ignored since a full org.jooq.Configuration was supplied");
+      this.jooqSettings = null;
+    } else {
+      this.jooqSettings = jooqSettings.orElse(null);
+    }
   }
 
   public DSLContext get() {
@@ -103,10 +108,7 @@ class JooqPersistService implements Provider<DSLContext>, UnitOfWork, PersistSer
 
     if (configuration != null) {
       logger.debug("Creating factory from configuration having dialect {}", configuration.dialect());
-      if (jooqSettings != null) {
-        logger.warn("@Injected org.jooq.conf.Settings is being ignored since a full org.jooq.Configuration was supplied");
-      }
-      jooqFactory = DSL.using(configuration);
+      jooqFactory = DSL.using(conn, configuration.dialect(), configuration.settings());
     } else {
       if (jooqSettings == null) {
         logger.debug("Creating factory with dialect {}", sqlDialect);
